@@ -5,7 +5,16 @@
     "paths": {
       "@/*": [
         "./*"
-      ]
+      ],
+      "@/screens/*": ["./Screens/*"],
+      "@/components/*": ["./components/*"],
+      "@/hooks/*": ["./hooks/*"],
+      "@/constants/*": ["./constants/*"],
+      "@/utils/*": ["./utils/*"],
+      "@/services/*": ["./services/*"],
+      "@/slice/*": ["./store/slices/*"],
+      "@/store/*": ["./store/*"],
+      "@/interfaces/*": ["./interfaces/*"],
     }
   },
   "include": [
