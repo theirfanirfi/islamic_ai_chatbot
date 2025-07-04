@@ -3,27 +3,32 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 // Async thunk for login
 export const loginUser = createAsyncThunk(
   'user/login',
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password }: {email:string,password:string}, { rejectWithValue }) => {
     try {
       // Replace with your actual API endpoint
-      const response = await fetch('YOUR_API_BASE_URL/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      // const response = await fetch('YOUR_API_BASE_URL/auth/login', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ email, password }),
+      // });
 
-      const data = await response.json();
+      // const data = await response.json();
 
-      if (!response.ok) {
-        return rejectWithValue(data.message || 'Login failed');
-      }
+      // if (!response.ok) {
+      //   return rejectWithValue(data.message || 'Login failed');
+      // }
 
       // Store token in AsyncStorage if needed
       // await AsyncStorage.setItem('authToken', data.token);
 
-      return data;
+      return {
+        token: "somerandomtoken",
+        user: {
+          name: "Ayub"
+        }
+      };
     } catch (error) {
       return rejectWithValue(error.message || 'Network error');
     }
@@ -116,6 +121,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
+        // console.log('state', state,'action', action.payload);
         state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;

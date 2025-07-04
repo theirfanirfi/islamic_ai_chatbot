@@ -1,4 +1,5 @@
 import { clearError, loginUser, registerUser } from '@/slice/UserSlice';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
@@ -17,7 +18,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const AuthScreen = () => {
   const dispatch = useDispatch();
-  const { loading, error, isAuthenticated } = useSelector((state) => state.user);
+  const router = useRouter();
+  const { loading, error, isAuthenticated, token, user } = useSelector((state) => state.user);
+  console.log(user);
   
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -73,6 +76,7 @@ const AuthScreen = () => {
         }));
         
         if (loginUser.fulfilled.match(result)) {
+          router.push('(chatbot)')
           Alert.alert('Success', 'Login successful');
           // Navigate to main app screen
           // navigation.navigate('MainApp');
