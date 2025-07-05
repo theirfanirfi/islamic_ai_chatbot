@@ -23,7 +23,7 @@ const getData = async () => {
 // Async thunk for login
 export const loginUser = createAsyncThunk(
   'user/login',
-  async ({ email, password }: {email:string,password:string}, { rejectWithValue }) => {
+  async ({ email, password }: { email: string, password: string }, { rejectWithValue }) => {
     try {
       // Replace with your actual API endpoint
       // const response = await fetch('YOUR_API_BASE_URL/auth/login', {
@@ -41,20 +41,24 @@ export const loginUser = createAsyncThunk(
       // }
 
       // Store token in AsyncStorage if needed
-      let data = {
-        token: "somerandomtoken",
-        user: {
-          name: "Ayub"
-        }
-      }
+      // let data = {
+      //   token: "somerandomtoken",
+      //   user: {
+      //     name: "Ayub"
+      //   }
+      // }
 
-      await storeUserData(data);
+      // await storeUserData(data);
 
       return {
         token: "somerandomtoken",
         user: {
-          name: "Ayub"
-        }
+          name: "Ayub",
+          token: "somerandomtoken",
+        },
+        isAuthenticated: true,
+        loading: false,
+        error: null,
       };
     } catch (error) {
       return rejectWithValue(error.message || 'Network error');
@@ -99,7 +103,7 @@ export const logoutUser = createAsyncThunk(
     try {
       // Clear token from AsyncStorage
       // await AsyncStorage.removeItem('authToken');
-      
+
       // Optional: Call logout API endpoint
       // await fetch('YOUR_API_BASE_URL/auth/logout', {
       //   method: 'POST',
@@ -115,30 +119,6 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-const getInitialState = async () => {
-  let data  = await getData()
-  let initialState = {}
-  if(data){
-    initialState = {
-    user: data,
-    isAuthenticated: true,
-    loading: false,
-    error: null,
-    token: data.token,
-  }
-
-  }else {
-    initialState = {
-    user: null,
-    isAuthenticated: false,
-    loading: false,
-    error: null,
-    token: null,
-  }
-  }
-
-  return initialState;
-}
 
 
 const userSlice = createSlice({
@@ -152,9 +132,8 @@ const userSlice = createSlice({
   },
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload.user;
-      state.isAuthenticated = true;
-      state.token = action.payload.token
+      state = action.payload.payload
+      console.log('checking', action.payload.payload.user)
     },
     clearError: (state) => {
       state.error = null;
@@ -175,7 +154,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        // console.log('state', state,'action', action.payload);
+        console.log('fullfilled', action.payload);
         state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
@@ -187,7 +166,7 @@ const userSlice = createSlice({
         state.error = action.payload;
         state.isAuthenticated = false;
       })
-      
+
       // Registration cases
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
@@ -205,7 +184,7 @@ const userSlice = createSlice({
         state.error = action.payload;
         state.isAuthenticated = false;
       })
-      
+
       // Logout cases
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;

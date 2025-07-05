@@ -1,4 +1,5 @@
-import { clearError, loginUser, registerUser } from '@/slice/UserSlice';
+import { clearError, loginUser, registerUser, setUser } from '@/slice/UserSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -29,6 +30,24 @@ const AuthScreen = () => {
     confirmPassword: '',
     name: '',
   });
+
+  const storeUserData = async (value: any) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('user', jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user');
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      console.log(e)
+    }
+  };
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -76,11 +95,11 @@ const AuthScreen = () => {
         }));
         
         if (loginUser.fulfilled.match(result)) {
+          dispatch(setUser(result));
+          await storeUserData(result);
           router.replace("(chatbot)");
           // router.push('(chatbot)')
           Alert.alert('Success', 'Login successful');
-          // Navigate to main app screen
-          // navigation.navigate('MainApp');
         }
       } else {
         const result = await dispatch(registerUser({
