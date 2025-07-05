@@ -1,29 +1,61 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+
+const storeUserData = async (value: any) => {
+  try {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem('user', jsonValue);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const getData = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem('user');
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (e) {
+    console.log(e)
+  }
+};
 
 // Async thunk for login
 export const loginUser = createAsyncThunk(
   'user/login',
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password }: {email:string,password:string}, { rejectWithValue }) => {
     try {
       // Replace with your actual API endpoint
-      const response = await fetch('YOUR_API_BASE_URL/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      // const response = await fetch('YOUR_API_BASE_URL/auth/login', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ email, password }),
+      // });
 
-      const data = await response.json();
+      // const data = await response.json();
 
-      if (!response.ok) {
-        return rejectWithValue(data.message || 'Login failed');
-      }
+      // if (!response.ok) {
+      //   return rejectWithValue(data.message || 'Login failed');
+      // }
 
       // Store token in AsyncStorage if needed
-      // await AsyncStorage.setItem('authToken', data.token);
+      let data = {
+        token: "somerandomtoken",
+        user: {
+          name: "Ayub"
+        }
+      }
 
-      return data;
+      await storeUserData(data);
+
+      return {
+        token: "somerandomtoken",
+        user: {
+          name: "Ayub"
+        }
+      };
     } catch (error) {
       return rejectWithValue(error.message || 'Network error');
     }
@@ -83,6 +115,32 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
+const getInitialState = async () => {
+  let data  = await getData()
+  let initialState = {}
+  if(data){
+    initialState = {
+    user: data,
+    isAuthenticated: true,
+    loading: false,
+    error: null,
+    token: data.token,
+  }
+
+  }else {
+    initialState = {
+    user: null,
+    isAuthenticated: false,
+    loading: false,
+    error: null,
+    token: null,
+  }
+  }
+
+  return initialState;
+}
+
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -94,8 +152,9 @@ const userSlice = createSlice({
   },
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload;
+      state.user = action.payload.user;
       state.isAuthenticated = true;
+      state.token = action.payload.token
     },
     clearError: (state) => {
       state.error = null;
@@ -116,6 +175,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
+        // console.log('state', state,'action', action.payload);
         state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;

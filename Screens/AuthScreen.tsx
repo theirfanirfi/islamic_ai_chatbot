@@ -1,7 +1,7 @@
 import "@/styles/authscreen.css";
+import { useRouter } from "expo-router";
 import { Eye, EyeOff, Lock, Mail, Moon, User } from 'lucide-react';
 import React, { useState } from 'react';
-
 const IslamicAuthApp = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -11,6 +11,7 @@ const IslamicAuthApp = () => {
     confirmPassword: ''
   });
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -25,8 +26,10 @@ const IslamicAuthApp = () => {
       if (!formData.email || !formData.password) {
         alert('Please fill in all required fields');
         return;
-      }
+      }else {
+        router.push('chatbot');
       alert('Welcome back! Login successful');
+      }
     } else {
       // Registration logic
       if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
