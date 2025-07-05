@@ -76,7 +76,8 @@ const AuthScreen = () => {
         }));
         
         if (loginUser.fulfilled.match(result)) {
-          router.push('(chatbot)')
+          router.replace("(chatbot)");
+          // router.push('(chatbot)')
           Alert.alert('Success', 'Login successful');
           // Navigate to main app screen
           // navigation.navigate('MainApp');

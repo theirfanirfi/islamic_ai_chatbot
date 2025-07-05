@@ -22,6 +22,7 @@ export default function RootLayout() {
      <Provider store={store}>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
+        <Stack.Screen name="(splash)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(chatbot)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
