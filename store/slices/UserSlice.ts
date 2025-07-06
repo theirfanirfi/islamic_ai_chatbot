@@ -72,24 +72,32 @@ export const registerUser = createAsyncThunk(
   async ({ name, email, password }, { rejectWithValue }) => {
     try {
       // Replace with your actual API endpoint
-      const response = await fetch('YOUR_API_BASE_URL/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      // const response = await fetch('YOUR_API_BASE_URL/auth/register', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ name, email, password }),
+      // });
+
+      // const data = await response.json();
+
+      // if (!response.ok) {
+      //   return rejectWithValue(data.message || 'Registration failed');
+      // }
+
+      // // Store token in AsyncStorage if needed
+      // // await AsyncStorage.setItem('authToken', data.token);
+      return {
+        token: "somerandomtoken",
+        user: {
+          name: "Ayub",
+          token: "somerandomtoken",
         },
-        body: JSON.stringify({ name, email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        return rejectWithValue(data.message || 'Registration failed');
-      }
-
-      // Store token in AsyncStorage if needed
-      // await AsyncStorage.setItem('authToken', data.token);
-
-      return data;
+        isAuthenticated: true,
+        loading: false,
+        error: null,
+      };
     } catch (error) {
       return rejectWithValue(error.message || 'Network error');
     }

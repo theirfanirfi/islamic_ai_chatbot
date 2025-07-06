@@ -98,7 +98,6 @@ const AuthScreen = () => {
           dispatch(setUser(result));
           await storeUserData(result);
           router.replace("(chatbot)");
-          // router.push('(chatbot)')
           Alert.alert('Success', 'Login successful');
         }
       } else {
@@ -109,9 +108,10 @@ const AuthScreen = () => {
         }));
         
         if (registerUser.fulfilled.match(result)) {
+          dispatch(setUser(result));
+          await storeUserData(result);
+          router.replace("(chatbot)");
           Alert.alert('Success', 'Registration successful');
-          // Navigate to main app screen
-          // navigation.navigate('MainApp');
         }
       }
     } catch (err) {

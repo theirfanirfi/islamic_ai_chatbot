@@ -33,7 +33,7 @@ const SplashScreen = () => {
 
     useEffect(() => {
         startAnimations();
-        clearData();
+        // clearData();
     }, []);
 
     const getData = async () => {
@@ -160,7 +160,7 @@ const SplashScreen = () => {
             setTimeout(async () => {
 
                 let data = await getData();
-                console.log('async data', data);
+                // console.log('async data', data);
                 if (data) {
                     await dispatch(setUser(data))
                     let walk = await getWalkthroughStatus();
@@ -173,8 +173,8 @@ const SplashScreen = () => {
                     }
 
                 } else {
-                    router.replace("(auth)");
-
+                    router.navigate("(auth)")
+                    // router.replace("(auth)");
                 }
 
             }, 500);
