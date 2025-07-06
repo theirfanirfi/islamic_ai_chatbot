@@ -18,6 +18,8 @@ const { width, height } = Dimensions.get('window');
 const SIDEBAR_WIDTH = width * 0.8;
 
 import ProfileSection from "@/components/ProfileSection";
+import { resetAuthState } from "@/slice/UserSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
@@ -26,6 +28,7 @@ import ProfileSection from "@/components/ProfileSection";
 const SettingsSection = ({ onSettingsPress }) => {
   const settingsItems = [
     { id: 'Security', label: 'Security', icon: 'shield-outline' },
+    { id: 'logout', label: 'Logout', icon: 'log-out' },
     { id: 'help', label: 'Help & Support', icon: 'help-circle-outline' },
   ];
 
@@ -52,7 +55,8 @@ const SettingsSection = ({ onSettingsPress }) => {
 const ChatSidebar = ({ isVisible, onClose, currentChatId, onChatSelect }) => {
   const state = useSelector((state) => state.user);
   // const chatHistory = state.chats.chats
-  const userName = state.user.name // This would come from user context/state
+  // console.log('state',state);
+  const userName = state?.user?.name // This would come from user context/state
   const slideAnim = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
   const router = useRouter();
   const dispatch = useDispatch();
@@ -81,12 +85,12 @@ const ChatSidebar = ({ isVisible, onClose, currentChatId, onChatSelect }) => {
       timestamp: 'Now',
       isActive: true,
     };
-    
+
     // dispatch(storeChats([
     //   { ...newChat },
     //   ...chatHistory.map(chat => ({ ...chat, isActive: false }))
     // ]));
-    
+
     onChatSelect(newChatId);
     onClose();
   };
@@ -96,9 +100,17 @@ const ChatSidebar = ({ isVisible, onClose, currentChatId, onChatSelect }) => {
     onClose();
   };
 
-  const handleSettingsPress = (settingId) => {
-    router.push(`/settings/${settingId}`);
-    onClose();
+  const handleSettingsPress = async (settingId) => {
+    if (settingId == 'logout') {
+      await AsyncStorage.removeItem('user')
+      // await AsyncStorage.removeItem('walk')
+      await dispatch(resetAuthState())
+      router.replace("(auth)")
+
+      //todo logout
+    }
+    // router.push(`/settings/${settingId}`);
+    // onClose();
   };
 
   return (
@@ -114,7 +126,7 @@ const ChatSidebar = ({ isVisible, onClose, currentChatId, onChatSelect }) => {
           activeOpacity={1}
           onPress={onClose}
         />
-        
+
         <Animated.View
           style={[
             styles.sidebarContainer,
@@ -125,7 +137,7 @@ const ChatSidebar = ({ isVisible, onClose, currentChatId, onChatSelect }) => {
         >
           <SafeAreaView style={styles.sidebarContent}>
             <StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,0.5)" />
-            
+
             {/* Header */}
             <View style={styles.sidebarHeader}>
               <Text style={styles.sidebarTitle}>AI Assistant</Text>
@@ -135,7 +147,9 @@ const ChatSidebar = ({ isVisible, onClose, currentChatId, onChatSelect }) => {
             </View>
 
             {/* Profile Section */}
-            <ProfileSection userName={userName} onProfilePress={handleProfilePress} />
+            {userName &&
+              <ProfileSection userName={userName} onProfilePress={handleProfilePress} />
+            }
 
             {/* New Chat Button */}
             {/* <TouchableOpacity style={styles.newChatButton} onPress={handleNewChat}>
@@ -143,7 +157,7 @@ const ChatSidebar = ({ isVisible, onClose, currentChatId, onChatSelect }) => {
               <Text style={styles.newChatButtonText}>New Chat</Text>
             </TouchableOpacity> */}
 
-        
+
 
 
             {/* Settings Section */}

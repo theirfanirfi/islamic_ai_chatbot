@@ -33,25 +33,7 @@ const SplashScreen = () => {
 
     useEffect(() => {
         startAnimations();
-
-        const checkLogin = async () => {
-            let data = await getData();
-            if (data) {
-                let loginData = {
-                    user: data,
-                    isAuthenticated: true,
-                    loading: false,
-                    error: null,
-                    token: data.token,
-                }
-                dispatch(setUser(loginData))
-                setIsLogin(true);
-            }else {
-                setIsLogin(false);
-            }
-        }
-
-        checkLogin();
+        // clearData();
     }, []);
 
     const getData = async () => {
@@ -63,6 +45,28 @@ const SplashScreen = () => {
             return null;
         }
     };
+
+    const getWalkthroughStatus = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('walk');
+            return jsonValue != null ? jsonValue : null;
+        } catch (e) {
+            console.log(e)
+            return null;
+        }
+    };
+
+    const setWalkthroughStatus = async () => {
+        try {
+            await AsyncStorage.setItem('walk', 'no');
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const clearData = async () => {
+        await AsyncStorage.removeItem('user');
+        await AsyncStorage.removeItem('walk');
+    }
 
     const startAnimations = () => {
         // Background fade in
@@ -153,12 +157,26 @@ const SplashScreen = () => {
             useNativeDriver: false,
         }).start(() => {
             // Finish splash screen after animations
-            setTimeout(() => {
-                if(isLogin){
-                    router.replace("(chatbot)");
-                }else {
-                    router.replace("(auth)");
+            setTimeout(async () => {
+
+                let data = await getData();
+                // console.log('async data', data);
+                if (data) {
+                    await dispatch(setUser(data))
+                    let walk = await getWalkthroughStatus();
+                    if (walk) {
+                        router.replace("(chatbot)");
+                    } else {
+                        await setWalkthroughStatus();
+                        router.replace("(walkthrough)");
+
+                    }
+
+                } else {
+                    router.navigate("(auth)")
+                    // router.replace("(auth)");
                 }
+
             }, 500);
         });
     };
