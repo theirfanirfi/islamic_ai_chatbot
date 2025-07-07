@@ -247,10 +247,6 @@ const AuthScreen = () => {
               <View style={styles.dividerLine} />
             </View>
 
-            <TouchableOpacity style={styles.socialButton}>
-              <Text style={styles.socialButtonText}>Continue with Google</Text>
-            </TouchableOpacity>
-
             <TouchableOpacity style={styles.toggleContainer} onPress={toggleAuthMode}>
               <Text style={styles.toggleText}>
                 {isLogin

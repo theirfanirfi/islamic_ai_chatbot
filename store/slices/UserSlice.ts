@@ -1,61 +1,29 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import BASE_URL from '@/constants/URLs';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
-
-const storeUserData = async (value: any) => {
-  try {
-    const jsonValue = JSON.stringify(value);
-    await AsyncStorage.setItem('user', jsonValue);
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-const getData = async () => {
-  try {
-    const jsonValue = await AsyncStorage.getItem('user');
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
-  } catch (e) {
-    console.log(e)
-  }
-};
 
 // Async thunk for login
 export const loginUser = createAsyncThunk(
   'user/login',
   async ({ email, password }: { email: string, password: string }, { rejectWithValue }) => {
     try {
-      // Replace with your actual API endpoint
-      // const response = await fetch('YOUR_API_BASE_URL/auth/login', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({ email, password }),
-      // });
+    
+      const response = await fetch(`${BASE_URL}/users/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // const data = await response.json();
+      const data = await response.json();
 
-      // if (!response.ok) {
-      //   return rejectWithValue(data.message || 'Login failed');
-      // }
-
-      // Store token in AsyncStorage if needed
-      // let data = {
-      //   token: "somerandomtoken",
-      //   user: {
-      //     name: "Ayub"
-      //   }
-      // }
-
-      // await storeUserData(data);
+      if (!response.ok) {
+        return rejectWithValue(data.message || 'Login failed');
+      }
 
       return {
-        token: "somerandomtoken",
-        user: {
-          name: "Ayub",
-          token: "somerandomtoken",
-        },
+        token: data.token,
+        user: data.user,
         isAuthenticated: true,
         loading: false,
         error: null,
