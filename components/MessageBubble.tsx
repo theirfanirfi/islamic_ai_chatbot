@@ -29,7 +29,7 @@ const dispatch = useDispatch()
       </View>}
 
       
-      {message.response != '' && (
+      {message.answer != '' && (
         <>
         <View style={[
       styles.container,
@@ -39,7 +39,7 @@ const dispatch = useDispatch()
         styles.text,
         styles.botText
       ]}>
-        {message.response}
+        {message.answer}
       </Text>
       </View>
         <View style={styles.actions}>
@@ -76,7 +76,7 @@ const dispatch = useDispatch()
       }
       
       <Text style={styles.timestamp}>
-        {new Date(message.timestamp).toLocaleTimeString()}
+        {new Date(message.created_at).toLocaleTimeString()}
       </Text>
     </>
 

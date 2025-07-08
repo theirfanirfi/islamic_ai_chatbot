@@ -96,6 +96,7 @@ const AuthScreen = () => {
         
         if (loginUser.fulfilled.match(result)) {
           dispatch(setUser(result));
+          console.log('my result',result);
           await storeUserData(result);
           router.replace("(chatbot)");
           Alert.alert('Success', 'Login successful');

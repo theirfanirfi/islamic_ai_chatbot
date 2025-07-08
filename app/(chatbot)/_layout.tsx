@@ -6,13 +6,6 @@ const ChatbotApp = () => {
   // const [showWalkthrough, setShowWalkthrough] = useState(true);
   const { isVisible, currentChatId, hideSidebar, toggleSidebar, handleChatSelect, currentChatTitle } = useSidebar();
 
-  // const handleWalkthroughComplete = () => {
-  //   setShowWalkthrough(false);
-  // };
-
-  // if (showWalkthrough) {
-  //   return <WalkthroughScreen onComplete={handleWalkthroughComplete} />;
-  // }
 
   return (
     <ChatScreen 
