@@ -7,7 +7,7 @@ import TypingIndicator from '@/components/TypingIndicator';
 import { useChat } from '@/hooks/useChat';
 import { useFeedback } from '@/hooks/useFeedback';
 import React from 'react';
-import { FlatList, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { FlatList, KeyboardAvoidingView, StatusBar, StyleSheet, Text, View } from 'react-native';
 
 const ChatScreen = ({ toggleSidebar, isVisible, hideSidebar, currentChatId, handleChatSelect, currentChatTitle }) => {
   const {
@@ -33,7 +33,8 @@ const ChatScreen = ({ toggleSidebar, isVisible, hideSidebar, currentChatId, hand
   } = useFeedback(handleFeedbackSubmit);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <>
+    <KeyboardAvoidingView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#667eea" />
       
       <ChatHeader onToggleSidebar={toggleSidebar} title={currentChatTitle} />
@@ -101,7 +102,8 @@ const ChatScreen = ({ toggleSidebar, isVisible, hideSidebar, currentChatId, hand
         currentChatId={currentChatId}
         onChatSelect={handleChatSelect}
       />
-    </SafeAreaView>
+    </KeyboardAvoidingView>
+    </>
   );
 };
 
