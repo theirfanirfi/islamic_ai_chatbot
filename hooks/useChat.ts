@@ -7,7 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export const useChat = (currentChatId) => {
   // const [messages, setMessages] = useState([]);
-  const messages: IChatState = useSelector((state) => state.chats)
+  var messages: IChatState = useSelector((state) => state.chats)
+  // const isLimitReached: boolean = useSelector((state) => state.chats)
+
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const flatListRef = useRef(null);

@@ -29,6 +29,8 @@ export interface IChatState {
   loading?: boolean;
   error?: string | null;
   sendingMessage?: boolean;
+  isLimitReached?: boolean;
+  limit_message?: string;
 }
 
 // API Response interfaces
