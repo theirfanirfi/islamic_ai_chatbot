@@ -102,6 +102,7 @@ const AuthScreen = () => {
           Alert.alert('Success', 'Login successful');
         }
       } else {
+        console.log('registration data',formData)
         const result = await dispatch(registerUser({
           name: formData.name,
           email: formData.email,

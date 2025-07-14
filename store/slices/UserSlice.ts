@@ -40,29 +40,25 @@ export const registerUser = createAsyncThunk(
   'user/register',
   async ({ name, email, password }, { rejectWithValue }) => {
     try {
-      // Replace with your actual API endpoint
-      // const response = await fetch('YOUR_API_BASE_URL/auth/register', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({ name, email, password }),
-      // });
-
-      // const data = await response.json();
-
-      // if (!response.ok) {
-      //   return rejectWithValue(data.message || 'Registration failed');
-      // }
-
-      // // Store token in AsyncStorage if needed
-      // // await AsyncStorage.setItem('authToken', data.token);
-      return {
-        token: "somerandomtoken",
-        user: {
-          name: "Ayub",
-          token: "somerandomtoken",
+      const response = await fetch(`${BASE_URL}/users/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ full_name: name, email: email,password: password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return rejectWithValue(data.message || 'Registration failed');
+      }
+
+      // Store token in AsyncStorage if needed
+      // await AsyncStorage.setItem('authToken', data.token);
+       return {
+        token: data.token,
+        user: data.user,
         isAuthenticated: true,
         loading: false,
         error: null,
