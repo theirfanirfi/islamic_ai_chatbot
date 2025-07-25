@@ -1,0 +1,39 @@
+import dummyMessages from '@/data/dummyChat';
+import { IChatState } from '@/interfaces/IChatMessage';
+import { createSlice } from '@reduxjs/toolkit';
+
+
+const initialState: IChatState = {
+  chats: dummyMessages
+};
+
+const chatSlice = createSlice({
+  name: 'chats',
+  initialState,
+  reducers: {
+    storeChats: (state, action) => {
+      console.log('before', state.chats.length, action)
+      state.chats.push(action.payload);
+      console.log('after', state.chats.length)
+    },
+    updateChatMessageResponse: (state, action) => {
+      const chat = state.chats.find(chat => chat.id === action.payload.id);
+      if (chat) {
+        chat.answer = action.payload.response;
+      }
+      console.log('message updated')
+    },
+    reactToMessage: (state, action) => {
+
+      const chat = state.chats.find(chat => chat.id === action.payload.id);
+      if (chat) {
+        chat.reaction = action.payload.reaction;
+      }
+
+
+    }
+  },
+});
+
+export const { storeChats, reactToMessage, updateChatMessageResponse } = chatSlice.actions;
+export default chatSlice.reducer;

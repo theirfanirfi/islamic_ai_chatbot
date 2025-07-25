@@ -1,63 +1,66 @@
-import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export const ChatHeader = ({ onToggleSidebar, title = "AI Assistant" }) => {
+const MenuIcon = () => (
+  <View style={styles.iconPlaceholder}>
+    <Text style={styles.iconText}>☰</Text>
+  </View>
+);
+
+export const ChatHeader = ({ onToggleSidebar, title = "Ihsan AI" }) => {
   return (
-    <View style={styles.chatHeader}>
-      <TouchableOpacity onPress={onToggleSidebar} style={styles.menuButton}>
-        <Ionicons name="menu" size={24} color="#fff" />
-      </TouchableOpacity>
-      <Text style={styles.chatHeaderTitle}>{title}</Text>
-      <View style={styles.chatHeaderRight}>
-        <View style={styles.statusIndicator}>
-          <View style={styles.onlineIndicator} />
-          <Text style={styles.statusText}>Online</Text>
-        </View>
-      </View>
-    </View>
+  <View style={styles.header}>
+    <TouchableOpacity
+      onPress={onToggleSidebar}
+      style={styles.headerButton}
+    >
+      <MenuIcon />
+    </TouchableOpacity>
+    
+    <Text style={styles.headerTitle}>{title || 'Ihsan AI'}</Text>
+    
+    <View style={styles.headerSpacer} />
+  </View>
   );
 };
 const styles = StyleSheet.create({
-      chatHeader: {
-    backgroundColor: '#667eea',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
+     header: {
+    position: 'absolute',
+    top: 54,
+    left: 24,
+    right: 24,
+    height: 42,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    elevation: 3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
   },
-  menuButton: {
-    padding: 5,
-    marginRight: 10,
+  headerButton: {
+    width: 42,
+    height: 42,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 21,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
   },
-  chatHeaderTitle: {
-    flex: 1,
+  headerTitle: {
+    color: '#1F1F1F',
     fontSize: 20,
+    fontWeight: '500',
+  },
+  headerSpacer: {
+    width: 42,
+  },
+    iconPlaceholder: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconText: {
+    fontSize: 18,
     fontWeight: '600',
-    color: '#fff',
-  },
-  chatHeaderRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  statusIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  onlineIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#4CAF50',
-    marginRight: 6,
-  },
-  statusText: {
-    color: '#fff',
-    fontSize: 12,
   },
 })
 export default ChatHeader;

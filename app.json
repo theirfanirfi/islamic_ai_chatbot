@@ -16,7 +16,18 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.theirfanirfi.IslamicAI",
+       
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "INTERNET",
+        "ACCESS_NETWORK_STATE",
+        "VIBRATE",
+        "SYSTEM_ALERT_WINDOW"
+      ]
+    
     },
     "web": {
       "bundler": "metro",
@@ -37,6 +48,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "3ffff27c-b8b7-40d8-8b3c-564db5c8febb"
+      }
     }
   }
 }
