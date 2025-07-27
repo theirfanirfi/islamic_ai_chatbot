@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router';
 import { Eye, EyeOff } from 'lucide-react-native';
 import React, { useState } from 'react';
 import {
+  ActivityIndicator,
   Alert, Dimensions,
   Image,
   StyleSheet,
@@ -24,7 +25,7 @@ const AuthScreen = () => {
   const router = useRouter();
   const { loading, error, isAuthenticated, token, user } = useSelector((state) => state.user);
   console.log(user);
-  
+
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     email: '',
@@ -34,110 +35,110 @@ const AuthScreen = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
 
-    const storeUserData = async (value: any) => {
-      try {
-        const jsonValue = JSON.stringify(value);
-        await AsyncStorage.setItem('user', jsonValue);
-      } catch (e) {
-        console.log('store auth data exception',e);
+  const storeUserData = async (value: any) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('user', jsonValue);
+    } catch (e) {
+      console.log('store auth data exception', e);
+    }
+  };
+
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+
+    // Clear error when user starts typing
+    if (error) {
+      dispatch(clearError());
+    }
+  };
+
+  const validateForm = () => {
+    if (isLogin) {
+      if (!formData.email || !formData.password) {
+        Alert.alert('Error', 'Please fill in all fields');
+        return false;
       }
-    };
+    } else {
+      if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+        Alert.alert('Error', 'Please fill in all fields');
+        return false;
+      }
+      if (formData.password !== formData.confirmPassword) {
+        Alert.alert('Error', 'Passwords do not match');
+        return false;
+      }
+      if (formData.password.length < 6) {
+        Alert.alert('Error', 'Password must be at least 6 characters long');
+        return false;
+      }
+    }
+    return true;
+  };
 
-      const handleInputChange = (field, value) => {
-        setFormData(prev => ({
-          ...prev,
-          [field]: value,
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
+
+    try {
+      if (isLogin) {
+        const result = await dispatch(loginUser({
+          email: formData.email,
+          password: formData.password,
         }));
-        
-        // Clear error when user starts typing
-        if (error) {
-          dispatch(clearError());
-        }
-      };
-    
-      const validateForm = () => {
-        if (isLogin) {
-          if (!formData.email || !formData.password) {
-            Alert.alert('Error', 'Please fill in all fields');
-            return false;
-          }
-        } else {
-          if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-            Alert.alert('Error', 'Please fill in all fields');
-            return false;
-          }
-          if (formData.password !== formData.confirmPassword) {
-            Alert.alert('Error', 'Passwords do not match');
-            return false;
-          }
-          if (formData.password.length < 6) {
-            Alert.alert('Error', 'Password must be at least 6 characters long');
-            return false;
-          }
-        }
-        return true;
-      };
 
-        const handleSubmit = async () => {
-          if (!validateForm()) return;
-      
-          try {
-            if (isLogin) {
-              const result = await dispatch(loginUser({
-                email: formData.email,
-                password: formData.password,
-              }));
-              
-              if (loginUser.fulfilled.match(result)) {
-                dispatch(setUser(result));
-                console.log('my result',result);
-                await storeUserData(result);
-                router.replace("(chatbot)");
-                Alert.alert('Success', 'Login successful');
-              }
-            } else {
-              console.log('registration data',formData)
-              const result = await dispatch(registerUser({
-                name: formData.name,
-                email: formData.email,
-                password: formData.password,
-              }));
-              
-              if (registerUser.fulfilled.match(result)) {
-                dispatch(setUser(result));
-                await storeUserData(result);
-                router.replace("(chatbot)" as any);
-                Alert.alert('Success', 'Registration successful');
-              }
-            }
-          } catch (err) {
-            console.error('Auth error:', err);
-          }
-        };
+        if (loginUser.fulfilled.match(result)) {
+          dispatch(setUser(result));
+          console.log('my result', result);
+          await storeUserData(result);
+          router.replace("(chatbot)");
+          Alert.alert('Success', 'Login successful');
+        }
+      } else {
+        console.log('registration data', formData)
+        const result = await dispatch(registerUser({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }));
+
+        if (registerUser.fulfilled.match(result)) {
+          dispatch(setUser(result));
+          await storeUserData(result);
+          router.replace("(chatbot)" as any);
+          Alert.alert('Success', 'Registration successful');
+        }
+      }
+    } catch (err) {
+      console.error('Auth error:', err);
+    }
+  };
 
   return (
     <View style={styles.container}>
 
-      
+
       {/* Background blur shapes */}
-     <LinearGradient colors={['rgba(255, 184, 29, 0.24)', '#FAFAF7']} dither={false} style={styles.topBlur}>
-      <Text style={styles.appTitle}>DeenCircle</Text>
+      <LinearGradient colors={['rgba(255, 184, 29, 0.24)', '#FAFAF7']} dither={false} style={styles.topBlur}>
+        <Text style={styles.appTitle}>DeenCircle</Text>
 
-      
-    </LinearGradient>
-         <LinearGradient colors={['rgba(255, 184, 29, 0.1)', '#FAFAF7']} style={styles.bottomBlur}>
 
-      
-    </LinearGradient>
+      </LinearGradient>
+      <LinearGradient colors={['rgba(255, 184, 29, 0.1)', '#FAFAF7']} style={styles.bottomBlur}>
+
+
+      </LinearGradient>
 
       {/* App Title */}
 
       {/* Book Image Card */}
       <View style={styles.imageCard}>
-      <Image style={{alignSelf:'center', top:-150}} width={width*0.6} height={height*0.42} source={require('../../assets/images/quran_image.png')} />
-    </View>
-    
-        {/* Book Container */}
+        <Image style={{ alignSelf: 'center', top: -150 }} width={width * 0.6} height={height * 0.42} source={require('../../assets/images/quran_image.png')} />
+      </View>
+
+      {/* Book Container */}
 
       {/* Main Content Container */}
       <View style={styles.mainContainer}>
@@ -178,8 +179,8 @@ const AuthScreen = () => {
                   style={styles.passwordInput}
                   placeholder="Enter password"
                   placeholderTextColor="rgba(31, 31, 31, 0.6)"
-                value={formData.password}
-                onChangeText={(value) => handleInputChange('password', value)}
+                  value={formData.password}
+                  onChangeText={(value) => handleInputChange('password', value)}
                   secureTextEntry={!showPassword}
                 />
                 <TouchableOpacity
@@ -202,10 +203,14 @@ const AuthScreen = () => {
         <View style={styles.buttonsContainer}>
           {/* Login Button */}
           <TouchableOpacity style={styles.loginButton}
-              onPress={handleSubmit}
-              disabled={loading}
+            onPress={handleSubmit}
+            disabled={loading}
           >
-            <Text style={styles.loginButtonText}>Login to your account</Text>
+            {loading ? (
+              <ActivityIndicator color="#FFFFFF" size="small" />
+            ) : (
+              <Text style={styles.loginButtonText}>Login to your account</Text>
+            )}
           </TouchableOpacity>
 
           {/* Google Button */}
@@ -227,8 +232,8 @@ const AuthScreen = () => {
           </View>
 
           {/* Sign Up Text */}
-           <TouchableOpacity>
-          <Text style={styles.signUpText}>Don't have an account? <Text style={{color:'black'}}>Sign up</Text></Text>
+          <TouchableOpacity onPress={() => router.push('signup')}>
+            <Text style={styles.signUpText}>Don't have an account? <Text style={{ color: 'black' }}>Sign up</Text></Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -262,7 +267,7 @@ const styles = StyleSheet.create({
     width: width * 0.95,
     height: height * 0.15,
     left: (width - 470) / 2 + 8,
-    bottom:4,
+    bottom: 4,
     borderRadius: 50,
     marginHorizontal: 16,
   },
@@ -334,10 +339,10 @@ const styles = StyleSheet.create({
     marginBottom: 60,
   },
   imageCard: {
-    width: width*0.6,
-    height: height*0.18,
+    width: width * 0.6,
+    height: height * 0.18,
     alignSelf: 'center',
-    alignContent:'center',
+    alignContent: 'center',
     borderRadius: 20,
     overflow: 'hidden',
     borderWidth: 1,
