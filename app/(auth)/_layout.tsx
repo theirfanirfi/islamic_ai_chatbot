@@ -1,9 +1,12 @@
+import { loginUser, registerUser, setUser } from '@/slice/UserSlice';
+import { clearError } from '@/store/slices/ChatSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Eye, EyeOff } from 'lucide-react-native';
 import React, { useState } from 'react';
 import {
-  Dimensions,
+  Alert, Dimensions,
   Image,
   StyleSheet,
   Text,
@@ -11,15 +14,106 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
 const { width, height } = Dimensions.get('window');
 
 
 const AuthScreen = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
   const router = useRouter();
+  const { loading, error, isAuthenticated, token, user } = useSelector((state) => state.user);
+  console.log(user);
+  
+  const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+  });
+  const [showPassword, setShowPassword] = useState(false);
+
+    const storeUserData = async (value: any) => {
+      try {
+        const jsonValue = JSON.stringify(value);
+        await AsyncStorage.setItem('user', jsonValue);
+      } catch (e) {
+        console.log('store auth data exception',e);
+      }
+    };
+
+      const handleInputChange = (field, value) => {
+        setFormData(prev => ({
+          ...prev,
+          [field]: value,
+        }));
+        
+        // Clear error when user starts typing
+        if (error) {
+          dispatch(clearError());
+        }
+      };
+    
+      const validateForm = () => {
+        if (isLogin) {
+          if (!formData.email || !formData.password) {
+            Alert.alert('Error', 'Please fill in all fields');
+            return false;
+          }
+        } else {
+          if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+            Alert.alert('Error', 'Please fill in all fields');
+            return false;
+          }
+          if (formData.password !== formData.confirmPassword) {
+            Alert.alert('Error', 'Passwords do not match');
+            return false;
+          }
+          if (formData.password.length < 6) {
+            Alert.alert('Error', 'Password must be at least 6 characters long');
+            return false;
+          }
+        }
+        return true;
+      };
+
+        const handleSubmit = async () => {
+          if (!validateForm()) return;
+      
+          try {
+            if (isLogin) {
+              const result = await dispatch(loginUser({
+                email: formData.email,
+                password: formData.password,
+              }));
+              
+              if (loginUser.fulfilled.match(result)) {
+                dispatch(setUser(result));
+                console.log('my result',result);
+                await storeUserData(result);
+                router.replace("(chatbot)");
+                Alert.alert('Success', 'Login successful');
+              }
+            } else {
+              console.log('registration data',formData)
+              const result = await dispatch(registerUser({
+                name: formData.name,
+                email: formData.email,
+                password: formData.password,
+              }));
+              
+              if (registerUser.fulfilled.match(result)) {
+                dispatch(setUser(result));
+                await storeUserData(result);
+                router.replace("(chatbot)" as any);
+                Alert.alert('Success', 'Registration successful');
+              }
+            }
+          } catch (err) {
+            console.error('Auth error:', err);
+          }
+        };
 
   return (
     <View style={styles.container}>
@@ -65,8 +159,8 @@ const AuthScreen = () => {
                 style={styles.input}
                 placeholder="Enter email address"
                 placeholderTextColor="rgba(31, 31, 31, 0.6)"
-                value={email}
-                onChangeText={setEmail}
+                value={formData.email}
+                onChangeText={(value) => handleInputChange('email', value)}
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
@@ -84,8 +178,8 @@ const AuthScreen = () => {
                   style={styles.passwordInput}
                   placeholder="Enter password"
                   placeholderTextColor="rgba(31, 31, 31, 0.6)"
-                  value={password}
-                  onChangeText={setPassword}
+                value={formData.password}
+                onChangeText={(value) => handleInputChange('password', value)}
                   secureTextEntry={!showPassword}
                 />
                 <TouchableOpacity
@@ -107,7 +201,10 @@ const AuthScreen = () => {
         {/* Buttons Container */}
         <View style={styles.buttonsContainer}>
           {/* Login Button */}
-          <TouchableOpacity style={styles.loginButton} onPress={() => router.replace('(chatbot)')}>
+          <TouchableOpacity style={styles.loginButton}
+              onPress={handleSubmit}
+              disabled={loading}
+          >
             <Text style={styles.loginButtonText}>Login to your account</Text>
           </TouchableOpacity>
 
