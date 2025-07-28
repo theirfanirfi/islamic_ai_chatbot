@@ -46,26 +46,24 @@ const SplashScreen = () => {
 
     useEffect(() => {
         setTimeout(async () => {
+            console.log('splashscreen timeout');
             let data = await getData();
-            console.log('async data', data.payload);
+            console.log('async data', data);
             if (data) {
-                console.log('async data inside if data', data);
-                
+                console.log('async data inside if data', data);            
                 await dispatch(setUser(data))
+                console.log('navigating to chatbot');
+                    router.replace("(chatbot)" as any);
+            } else {
                 let walk = await getWalkthroughStatus();
                 if (walk) {
                     console.log('navigating to chatbot', walk);
-                    router.replace("(chatbot)" as any);
+                    router.replace("(auth)" as any);
                 } else {
                     await setWalkthroughStatus();
                     console.log('navigating to walkthrough', walk);
                     router.replace("(walkthrough)" as any);
-
                 }
-
-            } else {
-                console.log('navigating to auth');
-                router.replace("(auth)");
             }
 
         }, 5000);

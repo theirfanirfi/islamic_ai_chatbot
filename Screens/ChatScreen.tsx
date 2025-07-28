@@ -17,6 +17,7 @@ import {
   Text,
   View
 } from 'react-native';
+import { useSelector } from 'react-redux';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -102,12 +103,16 @@ const FeatureCard = ({ icon, title, description, isLarge = false }) => (
   </View>
 );
 
-const WelcomeScreen = () => (
+const WelcomeScreen = () => {
+  const user = useSelector((state) => state.user);
+  console.log('WelcomeScreen user:', user);
+  
+  return (
   <View style={styles.welcomeContainer}>
     <View style={styles.greetingSection}>
       <Text style={styles.greetingText}>
         Assalamu alaikum{'\n'}
-        <Text style={styles.greetingName}>Sulman!</Text>
+        <Text style={styles.greetingName}>{user.user.full_name}!</Text>
       </Text>
       <Text style={styles.greetingSubtext}>
         How can I help you today?
@@ -137,6 +142,7 @@ const WelcomeScreen = () => (
     </View>
   </View>
 );
+}
 
 // Main ChatScreen Component
 const IhsanAIChatScreen = ({ toggleSidebar, isVisible, hideSidebar, currentChatId, handleChatSelect, currentChatTitle }) => {
