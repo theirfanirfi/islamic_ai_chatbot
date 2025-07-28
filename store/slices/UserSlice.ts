@@ -105,8 +105,12 @@ const userSlice = createSlice({
   },
   reducers: {
     setUser: (state, action) => {
-      state = action.payload.payload
-      console.log('checking', action.payload.payload.user)
+      state.error = null;
+      state.user = action.payload.payload.user;
+      state.isAuthenticated = true;
+      state.loading = false;
+      state.token = action.payload.payload.token;
+      console.log('setUser called', action.payload);
     },
     clearError: (state) => {
       state.error = null;

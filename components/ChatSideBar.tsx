@@ -55,10 +55,12 @@ const ChatSidebar = ({ isVisible, onClose, currentChatId, onChatSelect }) => {
   const state = useSelector((state) => state.user);
   // const chatHistory = state.chats.chats
   // console.log('state',state);
-  const userName = state?.user?.full_name // This would come from user context/state
+  const userName = state?.user?.full_name // This comes from user context/state
+  console.log('sidebar userName', state);
   const slideAnim = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
   const router = useRouter();
   const dispatch = useDispatch();
+
 
     const recentChats = [
     { id: 1, title: "🌙 Is it allowed to pray in shoes?", time: "18:12" },

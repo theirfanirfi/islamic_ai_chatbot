@@ -47,15 +47,18 @@ const SplashScreen = () => {
     useEffect(() => {
         setTimeout(async () => {
             let data = await getData();
-            console.log('async data', data);
+            console.log('async data', data.payload);
             if (data) {
                 console.log('async data inside if data', data);
+                
                 await dispatch(setUser(data))
                 let walk = await getWalkthroughStatus();
                 if (walk) {
+                    console.log('navigating to chatbot', walk);
                     router.replace("(chatbot)" as any);
                 } else {
                     await setWalkthroughStatus();
+                    console.log('navigating to walkthrough', walk);
                     router.replace("(walkthrough)" as any);
 
                 }
