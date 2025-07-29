@@ -2,6 +2,7 @@ import { makeChatActive } from "@/slice/ChatSlice";
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useRef } from 'react';
+
 import {
   Animated,
   Dimensions,
@@ -13,6 +14,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+
 import { useDispatch, useSelector } from 'react-redux';
 const { width, height } = Dimensions.get('window');
 const SIDEBAR_WIDTH = width * 0.8;
@@ -190,7 +192,10 @@ const ChatSidebar = ({ isVisible, onClose, currentChatId, onChatSelect }) => {
         </View>
 
         {/* User Profile Card */}
-        <TouchableOpacity style={styles.profileCard}>
+        <TouchableOpacity style={styles.profileCard} onPress={() => {
+          onClose();
+          router.push('setting');
+        }}>
           <View style={styles.profileContent}>
             <Image 
               source={{ uri: `https://ui-avatars.com/api/?name=${userName}` }}
@@ -198,17 +203,9 @@ const ChatSidebar = ({ isVisible, onClose, currentChatId, onChatSelect }) => {
             />
             <View style={styles.profileText}>
               <Text style={styles.profileName}>{userName}</Text>
-              {/* <Text style={styles.profileLocation}>Marseille</Text> */}
+              <Text style={styles.profileLocation}>Setting & Privacy</Text>
             </View>
           </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-        style={{flexDirection: 'row', alignItems: 'flex-start', paddingVertical: 12, paddingHorizontal: 16, borderRadius: 8, backgroundColor: '#ffffff'}} 
-        onPress={()=>handleSettingsPress('logout')}>
-              <Ionicons name="log-out" size={20} color="#666" />
-              <Text>Logout</Text>
-
         </TouchableOpacity>
       </View>
     </View>

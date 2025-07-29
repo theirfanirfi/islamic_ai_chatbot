@@ -42,6 +42,9 @@ export default function RootLayout() {
         <Stack.Screen name="(chatbot)" options={{ headerShown: false }} />
         <Stack.Screen name="(walkthrough)" options={{ headerShown: false }} />
         <Stack.Screen name="signup" options={{ headerShown: false }} />
+        <Stack.Screen name="setting" options={{ headerShown: false }} />
+        <Stack.Screen name="feedback" options={{ headerShown: false }} />
+        <Stack.Screen name="privacy" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
