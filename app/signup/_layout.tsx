@@ -1,7 +1,8 @@
+import BottomBlurView from '@/components/BottomBlurView';
+import TopBlurView from '@/components/TopBlurView';
 import { registerUser, setUser } from '@/slice/UserSlice';
 import { clearError } from '@/store/slices/ChatSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Eye, EyeOff } from 'lucide-react-native';
 import React, { useState } from 'react';
@@ -101,22 +102,17 @@ const SignupScreen = () => {
         <View style={styles.container}>
 
 
-            {/* Background blur shapes */}
-            <LinearGradient colors={['rgba(255, 184, 29, 0.24)', '#FAFAF7']} dither={false} style={styles.topBlur}>
-                <Text style={styles.appTitle}>DeenCircle</Text>
 
-
-            </LinearGradient>
-            <LinearGradient colors={['rgba(255, 184, 29, 0.1)', '#FAFAF7']} style={styles.bottomBlur}>
-
-
-            </LinearGradient>
+      {/* Background blur shapes */}
+      <TopBlurView width={width} height={height} />
+        <Text style={styles.appTitle}>DeenCircle</Text>
+      <BottomBlurView width={width} height={height} />
 
             {/* App Title */}
 
             {/* Book Image Card */}
             <View style={styles.imageCard}>
-                <Image style={{ alignSelf: 'center', top: -150 }} width={width * 0.6} height={height * 0.42} source={require('../../assets/images/quran_image.png')} />
+                <Image style={{ alignSelf: 'center', top: -150 }} width={width * 0.8} height={height * 0.42} source={require('../../assets/images/quran_image.png')} />
             </View>
 
             {/* Book Container */}
@@ -281,25 +277,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8F6F1',
         position: 'relative',
     },
-    topBlur: {
-        position: 'absolute',
-        width: width * 0.94,
-        height: height * 0.18,
-        marginHorizontal: 18,
-        top: height * 0.08,
-        borderTopLeftRadius: 250,
-        borderTopRightRadius: 250,
-
-    },
-    bottomBlur: {
-        position: 'absolute',
-        width: width * 0.95,
-        height: height * 0.15,
-        left: (width - 470) / 2 + 8,
-        bottom: 4,
-        borderRadius: 50,
-        marginHorizontal: 16,
-    },
     statusBar: {
         height: 54,
         flexDirection: 'row',
@@ -319,63 +296,24 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 8,
     },
-    signalBars: {
-        width: 19.2,
-        height: 11,
-        backgroundColor: '#1F1F1F',
-    },
-    wifi: {
-        width: 17.14,
-        height: 12,
-        backgroundColor: '#1F1F1F',
-    },
-    battery: {
-        position: 'relative',
-        width: 27,
-        height: 13,
-    },
-    batteryBorder: {
-        width: 25,
-        height: 13,
-        borderWidth: 1,
-        borderColor: 'rgba(31, 31, 31, 0.35)',
-        borderRadius: 4.3,
-    },
-    batteryCap: {
-        position: 'absolute',
-        width: 1.33,
-        height: 4,
-        right: -2,
-        top: 4.5,
-        backgroundColor: 'rgba(31, 31, 31, 0.4)',
-        borderRadius: 1,
-    },
-    batteryCapacity: {
-        position: 'absolute',
-        width: 21,
-        height: 9,
-        left: 2,
-        top: 2,
-        backgroundColor: '#1F1F1F',
-        borderRadius: 2.5,
-    },
     appTitle: {
-        fontSize: 20,
-        fontWeight: '500',
-        color: '#354134',
-        textAlign: 'center',
-        top: height * 0.0001,
-        marginBottom: 60,
+      position: 'absolute',
+    fontSize: 30,
+    fontWeight: '500',
+    color: '#354134',
+    textAlign: 'center',
+    top: height * 0.06,
+    alignSelf: 'center',
     },
     imageCard: {
-        width: width * 0.6,
-        height: height * 0.18,
+        width: width * 0.8,
+        height: height * 0.2,
         alignSelf: 'center',
         alignContent: 'center',
         borderRadius: 20,
         overflow: 'hidden',
         borderWidth: 1,
-        top: height * 0.15,
+        top: height * 0.12,
         borderColor: '#3D6633',
         marginBottom: 15,
     },
@@ -436,31 +374,32 @@ const styles = StyleSheet.create({
         paddingHorizontal: 24,
         position: 'relative',
         top: height * 0.14,
-        gap: 16,
+        gap: 10,
     },
     welcomeSection: {
         alignItems: 'center',
-        gap: 10,
+        gap: 6,
     },
     welcomeTitle: {
         fontSize: 30,
         fontWeight: '700',
-        lineHeight: 44,
+        lineHeight: 22,
         textAlign: 'center',
         color: '#1F1F1F',
     },
     welcomeSubtitle: {
         fontSize: 18,
         fontWeight: '400',
-        lineHeight: 22,
+        lineHeight: 18,
         textAlign: 'center',
         color: '#262626',
     },
     fieldsContainer: {
-        gap: 20,
+       marginTop: 10,
+       gap: 12,
     },
     fieldWrapper: {
-        gap: 4,
+        gap: 3,
     },
     textField: {
         position: 'relative',
@@ -513,7 +452,7 @@ const styles = StyleSheet.create({
         gap: 12,
     },
     loginButton: {
-        height: 54,
+        height: 44,
         backgroundColor: '#89A688',
         borderRadius: 12,
         justifyContent: 'center',
@@ -529,18 +468,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     googleButton: {
-        height: 45,
+        height: 40,
         backgroundColor: 'rgba(184, 126, 0, 0.1)',
         borderRadius: 12,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 8,
+        gap: 6,
         paddingHorizontal: 8,
     },
     googleIcon: {
-        width: 24,
-        height: 24,
+        width: 20,
+        height: 20,
         position: 'relative',
     },
     googleIconPart1: {

@@ -1,7 +1,8 @@
+import BottomBlurView from '@/components/BottomBlurView';
+import TopBlurView from '@/components/TopBlurView';
 import { loginUser, registerUser, setUser } from '@/slice/UserSlice';
 import { clearError } from '@/store/slices/ChatSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Eye, EyeOff } from 'lucide-react-native';
 import React, { useState } from 'react';
@@ -121,15 +122,9 @@ const AuthScreen = () => {
 
 
       {/* Background blur shapes */}
-      <LinearGradient colors={['rgba(255, 184, 29, 0.24)', '#FAFAF7']} dither={false} style={styles.topBlur}>
+      <TopBlurView width={width} height={height} />
         <Text style={styles.appTitle}>DeenCircle</Text>
-
-
-      </LinearGradient>
-      <LinearGradient colors={['rgba(255, 184, 29, 0.1)', '#FAFAF7']} style={styles.bottomBlur}>
-
-
-      </LinearGradient>
+      <BottomBlurView width={width} height={height} />
 
       {/* App Title */}
 
@@ -254,22 +249,22 @@ const styles = StyleSheet.create({
   },
   topBlur: {
     position: 'absolute',
-    width: width * 0.94,
-    height: height * 0.18,
-    marginHorizontal: 18,
-    top: height * 0.08,
-    borderTopLeftRadius: 250,
-    borderTopRightRadius: 250,
+    width: width * 0.95,
+    height: height * 0.3,
+    top: height * 0.1,
+    backgroundColor: 'hsla(41, 100%, 56%, 0.06)',
+    borderRadius: 50,
+    marginHorizontal: width * 0.025,
 
   },
   bottomBlur: {
     position: 'absolute',
     width: width * 0.95,
-    height: height * 0.15,
-    left: (width - 470) / 2 + 8,
-    bottom: 4,
+    height: height * 0.3,
+    bottom: 12,
+    backgroundColor: 'rgba(255, 184, 29, 0.04)',
     borderRadius: 50,
-    marginHorizontal: 16,
+    marginHorizontal: width * 0.025, // 2.5% margin on both sides
   },
   statusBar: {
     height: 54,
@@ -331,12 +326,13 @@ const styles = StyleSheet.create({
     borderRadius: 2.5,
   },
   appTitle: {
-    fontSize: 20,
+    position: 'absolute',
+    fontSize: 30,
     fontWeight: '500',
     color: '#354134',
     textAlign: 'center',
-    top: height * 0.0001,
-    marginBottom: 60,
+    top: height * 0.08,
+    alignSelf: 'center',
   },
   imageCard: {
     width: width * 0.6,

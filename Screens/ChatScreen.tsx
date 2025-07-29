@@ -5,6 +5,7 @@ import FeedbackModal from '@/components/FeedbackModal';
 import MessageBubble from '@/components/MessageBubble';
 import { useChat } from '@/hooks/useChat';
 import { useFeedback } from '@/hooks/useFeedback';
+import { BlurView } from 'expo-blur';
 import React, { useEffect, useState } from 'react';
 import {
   Animated,
@@ -214,8 +215,8 @@ const IhsanAIChatScreen = ({ toggleSidebar, isVisible, hideSidebar, currentChatI
     >
       
       {/* Background Effects */}
-      <View style={styles.backgroundBlur1} />
-      <View style={styles.backgroundBlur2} />
+      <BlurView style={styles.backgroundBlur1} intensity={100}  />
+      <BlurView style={styles.backgroundBlur2} />
 
       {/* Header */}
       <ChatHeader onToggleSidebar={toggleSidebar} title={currentChatTitle} />
@@ -275,8 +276,8 @@ const IhsanAIChatScreen = ({ toggleSidebar, isVisible, hideSidebar, currentChatI
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: 414,
-    height: 896,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
     backgroundColor: '#F8F6F1',
     borderRadius: 32,
     overflow: 'hidden',
@@ -284,21 +285,21 @@ const styles = StyleSheet.create({
   },
   backgroundBlur1: {
     position: 'absolute',
-    width: 470,
-    height: 276,
-    left: (414 - 470) / 2,
-    top: 78,
-    backgroundColor: 'rgba(255, 184, 29, 0.24)',
-    borderRadius: 235,
+    width: SCREEN_WIDTH * 0.95,
+    height: SCREEN_HEIGHT * 0.2,
+    top: SCREEN_HEIGHT * 0.1,
+    backgroundColor: 'rgba(255, 184, 29, 0.16)',
+    borderRadius: 50,
+    marginHorizontal: SCREEN_WIDTH * 0.025, // 2.5% margin on both sides
   },
   backgroundBlur2: {
     position: 'absolute',
-    width: 470,
-    height: 276,
-    left: (414 - 470) / 2 + 8,
-    top: 710,
-    backgroundColor: 'rgba(255, 184, 29, 0.12)',
-    borderRadius: 235,
+    width: SCREEN_WIDTH * 0.95,
+    height: SCREEN_HEIGHT * 0.3,
+    bottom: 12,
+    backgroundColor: 'rgba(255, 184, 29, 0.09)',
+    borderRadius: 50,
+    marginHorizontal: SCREEN_WIDTH * 0.025, // 2.5% margin on both sides
   },
   statusBar: {
     position: 'absolute',
