@@ -219,7 +219,7 @@ const IhsanAIChatScreen = ({ toggleSidebar, isVisible, hideSidebar, currentChatI
       <BlurView style={styles.backgroundBlur2} />
 
       {/* Header */}
-      <ChatHeader onToggleSidebar={toggleSidebar} title={currentChatTitle} />
+      <ChatHeader onToggleSidebar={toggleSidebar} title={currentChatTitle} width={SCREEN_WIDTH} height={SCREEN_HEIGHT} />
 
       {/* Content Area */}
       <View style={styles.contentArea}>
@@ -249,8 +249,6 @@ const IhsanAIChatScreen = ({ toggleSidebar, isVisible, hideSidebar, currentChatI
         disabled={isLoading}
       />
 
-      {/* Home Indicator */}
-      <View style={styles.homeIndicator} />
 
       {/* Modals */}
       <FeedbackModal
@@ -279,7 +277,6 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
     backgroundColor: '#F8F6F1',
-    borderRadius: 32,
     overflow: 'hidden',
     alignSelf: 'center',
   },
@@ -360,10 +357,8 @@ const styles = StyleSheet.create({
   },
   header: {
     position: 'absolute',
-    top: 54,
-    left: 24,
-    right: 24,
-    height: 42,
+    top: SCREEN_HEIGHT * 0.05,
+    height: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

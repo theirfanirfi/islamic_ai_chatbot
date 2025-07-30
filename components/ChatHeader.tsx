@@ -6,9 +6,9 @@ const MenuIcon = () => (
   </View>
 );
 
-export const ChatHeader = ({ onToggleSidebar, title = "Ihsan AI" }) => {
+export const ChatHeader = ({ onToggleSidebar, title = "Ihsan AI", width, height }) => {
   return (
-  <View style={styles.header}>
+  <View style={[styles.header,{top: height*0.03, height: height*0.05, width: width}]}>
     <TouchableOpacity
       onPress={onToggleSidebar}
       style={styles.headerButton}
@@ -24,14 +24,12 @@ export const ChatHeader = ({ onToggleSidebar, title = "Ihsan AI" }) => {
 };
 const styles = StyleSheet.create({
      header: {
+      flex: 1,
     position: 'absolute',
-    top: 54,
-    left: 24,
-    right: 24,
-    height: 42,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 20,
   },
   headerButton: {
     width: 42,
